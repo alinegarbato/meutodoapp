@@ -34,8 +34,8 @@ public class TaskControler {
             statement.setBoolean ( 4, isIsCompleted());
             statement.setString ( 5, task.getNotes());
             statement.setDate ( 6, new Date(task.getDeadline ().getTime()) );
-            statement.setDate ( 7, new Date (task.getCreatedAt ()) );
-            statement.setDate ( 7, new Date (task.getUpdatedAt ()) );
+            statement.setDate ( 7, new Date (task.getCreatedAt().getTime()));
+            statement.setDate ( 7, new Date (task.getUpdatedAt().getTime()));
             statement.execute ();
         } catch ( Exception ex ) {
             throw new RuntimeException ("Erro ao salvar tarefa" + ex.getMessage (), ex); 
@@ -43,11 +43,36 @@ public class TaskControler {
             ConnectionFactory.closeConnection ( connection );
         }
         }
+
+    private boolean isIsCompleted () {
+        throw new UnsupportedOperationException ( "Not supported yet." ); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     }
     
     public void update(Task task) {
 
-    }
+         String sql = "UPDATE tasks SET idProject = ?, name = ?, description = ?, notes = ?, deadline = ?, completed = ?, createdAt = ?, updatedAt = ?, WHERE id = ?";
+
+         Connection connection = null;
+         PreparedStatement statement = null;
+        
+         try {
+
+             connection = ConnectionFactory.getConnection();
+             statement = connection.prepareStatement (sql);
+             statement.setInt(1, task.getIdProject());
+             statement.setString(1, task.getName());
+             statement.setString(1, task.getDescription());
+             statement.setString(1, task.getNotes());
+             statement.setString(1, task.getisISCompleted());
+             statement.setDate (1, new Date (task.getDeadline().getTime()));
+             statement.setDate (1, new Date (task.getCreatedAt().getTime()));
+             statement.setDate (1, new Date (task.getUpdatedAt().getTime()));
+             statement.execute();
+
+    } catch (Exception ex) {
+         throw new RuntimeException("Erro ao deletar tarefa" + ex.getMessage());
+}
 
     public void removeById(int taskId) throws SQLException{
 
@@ -63,10 +88,10 @@ public class TaskControler {
             statement.setInt (1, taskId);
             statement.execute ();
 
-        } catch ( Exception e ) {
-            throw new SQLException("Erro ao Deletar Tarefa");
+        } catch ( Exception ex ) {
+            throw new RuntimeException("Erro ao Deletar Tarefa" + ex.getMessage(), ex);
         } finally {
-            ConnectionFactory.closeConnection ( conn );
+            ConnectionFactory.closeConnection ( connection, statement );
 }
  
 
