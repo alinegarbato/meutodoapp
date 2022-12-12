@@ -4,12 +4,15 @@ test
  */
 package todoapp;
 
-public class Main {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import util.ConnectionFactory;
+import java.sql.Connection;
 
+public class Main {
+   
     public static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
-    }
+ 
+        Connection c = ConnectionFactory.getConnection ();
+        
+        ConnectionFactory.closeConnection(c);
+     }
 }
